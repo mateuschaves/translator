@@ -21,8 +21,8 @@ function App(fileName) {
     let stringsTranlated = [];
 
     for (const line of fileLines) {
-      const start = line.indexOf("=> '") + 4;
-      const end = line.lastIndexOf("'");
+      const start = line.indexOf(`=> '`) + 4;
+      const end = line.lastIndexOf(`'`);
 
       const string = line.slice(start, end).replace("\\", "");
 
@@ -36,7 +36,7 @@ function App(fileName) {
           const stringTranslated = await translatorService.translate(string);
           console.log(stringTranslated);
           stringsTranlated.push(
-            line.replace(`=> '${string}'`, `=> "${stringTranslated}"`)
+            line.replace(`=> '${string}'`, `=> '${stringTranslated}'`)
           );
         } else {
         }
@@ -51,4 +51,4 @@ function App(fileName) {
   init();
 }
 
-App("auth");
+App("validation");
