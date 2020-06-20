@@ -1,4 +1,5 @@
 const fs = require("fs");
+const translatorService = require("./services/translator");
 
 function App() {
   function readFile(fileName) {
@@ -12,23 +13,38 @@ function App() {
     }
   }
 
-  function init() {
-    const file = readFile("api.php");
+  async function init() {
+    const file = readFile("alo.php");
 
     const fileLines = file.split(/\r\n|\r|\n/g);
 
-    const fileLinesTranslated = fileLines.map((line, index) => {
+    let stringsTranlated = [];
+
+    for (const line of fileLines) {
       const start = line.indexOf("=> '") + 4;
       const end = line.lastIndexOf("'");
 
       const string = line.slice(start, end);
 
-      return line.replace(`=> '${string}'`, `=> '${string} translated'`);
-    });
+      if (line.includes("[") || line.includes("]")) {
+        stringsTranlated.push(line);
+        continue;
+      }
 
-    console.log(fileLinesTranslated);
+      try {
+        if (string.length) {
+          const stringTranslated = await translatorService.translate(string);
+          stringsTranlated.push(
+            line.replace(`=> '${string}'`, `=> "${stringTranslated}"`)
+          );
+        } else {
+        }
+      } catch (error) {
+        console.log("merda");
+      }
+    }
 
-    fs.writeFileSync("teste.php", fileLinesTranslated.join("\n"));
+    fs.writeFileSync("teste.php", stringsTranlated.join("\n"));
   }
 
   init();
