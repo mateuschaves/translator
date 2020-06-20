@@ -24,7 +24,7 @@ function App(fileName) {
       const start = line.indexOf("=> '") + 4;
       const end = line.lastIndexOf("'");
 
-      const string = line.slice(start, end);
+      const string = line.slice(start, end).replace("\\", "");
 
       if (line.includes("[") || line.includes("]")) {
         stringsTranlated.push(line);
@@ -51,4 +51,4 @@ function App(fileName) {
   init();
 }
 
-App("api");
+App("auth");
