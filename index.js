@@ -1,7 +1,7 @@
 const fs = require("fs");
 const translatorService = require("./services/translator");
 
-function App() {
+function App(fileName) {
   function readFile(fileName) {
     try {
       const file = fs.readFileSync(fileName, {
@@ -14,7 +14,7 @@ function App() {
   }
 
   async function init() {
-    const file = readFile("alo.php");
+    const file = readFile(`${fileName}.php`);
 
     const fileLines = file.split(/\r\n|\r|\n/g);
 
@@ -34,6 +34,7 @@ function App() {
       try {
         if (string.length) {
           const stringTranslated = await translatorService.translate(string);
+          console.log(stringTranslated);
           stringsTranlated.push(
             line.replace(`=> '${string}'`, `=> "${stringTranslated}"`)
           );
@@ -44,10 +45,10 @@ function App() {
       }
     }
 
-    fs.writeFileSync("teste.php", stringsTranlated.join("\n"));
+    fs.writeFileSync(`${fileName}-pt.php`, stringsTranlated.join("\n"));
   }
 
   init();
 }
 
-App();
+App("api");
